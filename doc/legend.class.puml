@@ -1,0 +1,15 @@
+@startuml
+hide empty members
+struct A
+struct B
+struct C
+struct D
+A *--> B
+A *--> C
+A *--> D
+B o--> C
+C --> D
+note right of A: A creates B, C, D
+note left of B: B clones C
+note left of C: C references D
+@enduml

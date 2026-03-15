@@ -1,0 +1,31 @@
+@startuml
+hide empty members
+
+struct ResourceService
+struct CreateUoW
+struct DeleteUoW
+struct UnitOfWork
+struct ResourceRepo
+struct OutboxRepo
+
+package sqlx {
+    struct "postgres::PgPool" as PgPool
+    struct Transaction
+}
+
+
+CreateUoW  --> UnitOfWork: calls
+DeleteUoW  --> UnitOfWork: calls
+UnitOfWork o--> PgPool
+PgPool *-right-> "*" Transaction
+
+CreateUoW --> ResourceRepo: calls
+CreateUoW --> OutboxRepo: calls
+DeleteUoW --> ResourceRepo: calls
+DeleteUoW --> OutboxRepo: calls
+ResourceService --> CreateUoW: calls
+ResourceService --> DeleteUoW: calls
+
+ResourceRepo ..> Transaction: param
+OutboxRepo ..> Transaction: param
+@enduml

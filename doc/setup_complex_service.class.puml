@@ -1,0 +1,39 @@
+@startuml
+
+hide empty members
+
+struct main <<(F,LightGreen)>>
+
+struct ResourceService
+struct CreateUoW
+struct DeleteUoW
+struct UnitOfWork
+
+struct ResourceRepo
+struct OutboxRepo
+
+package sqlx {
+    struct PgPool
+}
+
+main *--> "1" UnitOfWork
+main *--> "1" ResourceRepo
+main *--> "1" OutboxRepo
+
+main *--> "1" ResourceService
+
+UnitOfWork *--> "1" PgPool
+ResourceService ..> UnitOfWork
+ResourceService ..> ResourceRepo
+ResourceService ..> OutboxRepo
+ResourceService *--> CreateUoW
+ResourceService *--> DeleteUoW
+
+CreateUoW o--> "1" UnitOfWork
+CreateUoW --> ResourceRepo: Arc<Rc>
+DeleteUoW o--> "1" UnitOfWork
+DeleteUoW --> OutboxRepo: Arc<Rc>
+
+
+
+@enduml

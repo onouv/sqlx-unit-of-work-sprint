@@ -1,0 +1,17 @@
+@startuml 
+hide empty members
+struct main <<(F, Darkorange)>>
+struct DomainService <<metamodel>>
+struct DomainRepository <<metamodel>>
+struct DomainUnitOfWork <<metamodel>>
+struct UnitOfWork
+struct "sqlx::postgres::PgPool" as pool
+
+main *--> "*" DomainService
+main *--> "1" UnitOfWork
+main *--> "*" DomainRepository
+DomainService --> "*" DomainUnitOfWork
+DomainUnitOfWork --> "*" DomainRepository: Arc<Rc>
+DomainUnitOfWork o--> "1" UnitOfWork
+UnitOfWork *--> "1" pool
+@enduml
