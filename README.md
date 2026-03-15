@@ -84,7 +84,7 @@ MIT
 
 To visualize the Rust design in PlantUml (which does not lend itself towards that language), I am adapting the notation a bit: 
 
-![Notation](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/onouv/sql-unit-of-work-sprint/main/doc/legend.class.puml)
+![Notation](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/onouv/sqlx-unit-of-work-sprint/main/doc/legend.class.puml)
 
 A "complex service" is one that needs to bundle multiple repository accesses under a single transaction as discussed in the [article](https://medium.com/@patrickkoss/the-unit-of-work-pattern-in-rust-2bd620f6d517), and frequently encountered when a service needs to do a business domain transaction, but also publish a message about this on a messaging system (e.g. Kafka) to let other services know about the fact. For this, often the outbox pattern is used. We are just emulating the initial step of this here, namely writing to an outbox table. In reality, this would asynchronously be evaluated by a CDC adapter and the appropriate messages would be published.  
 
@@ -92,11 +92,11 @@ In essence, this is just an example of how you must run operations in a common t
 
 This is the responsibility of the [UnitOfWork](./src/application/uow.rs). This struct handles an sqlx  connection `Pool` and the associaed sqlx `Transaction` when running the callback provided by the client code.
 
-![Using the UnitOfWork](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/onouv/sql-unit-of-work-sprint/main/doc/overview_complex_service.class.puml)
+![Using the UnitOfWork](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/onouv/sqlx-unit-of-work-sprint/main/doc/overview_complex_service.class.puml)
 
 To set all this up, everything is created in the `main` function. It creates a `UnitOfWork`. This is passed as a `clone()` to the application services constructor, together with the required repositories. The `UnitOfWork` only contains the `PgPool` which is `Clone`. The repos are `Clone` for even less money. 
 
-![Creation and Injection](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/onouv/sql-unit-of-work-sprint/main/doc/setup_complex_service.class.puml)
+![Creation and Injection](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/onouv/sqlx-unit-of-work-sprint/main/doc/setup_complex_service.class.puml)
 
 The service constructor also does a bunch of `Arc` and `Rc` magic - just read the [article](https://medium.com/@patrickkoss/the-unit-of-work-pattern-in-rust-2bd620f6d517), and goes to town for its business work.  
 
