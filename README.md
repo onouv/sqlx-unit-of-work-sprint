@@ -11,7 +11,7 @@ Implementig a somewhat simplified hexagonal architecture (e.g. no ports, no inbo
 
 ### Environment
 
-The system checks for a `.env` file in the project root folder to find certain configuration variables. These values are needed for the dataase layer including the docker setup of the database. After cloning the project, you need to set one up:
+The system checks for a `.env` file in the project root folder to find certain configuration variables. These values are needed for the database layer including the docker setup of the database. After cloning the project, you need to set one up:
 
 ```bash
 #.env 
@@ -98,6 +98,5 @@ To set all this up, everything is created in the `main` function. It creates a `
 
 ![Creation and Injection](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/onouv/sqlx-unit-of-work-sprint/main/doc/setup_complex_service.class.puml)
 
-The service constructor also does a bunch of `Arc` and `Rc` magic - just read the [article](https://medium.com/@patrickkoss/the-unit-of-work-pattern-in-rust-2bd620f6d517), and goes to town for its business work.  
+The different things a domain service needs to do now are delegated into specialized units of work, like `CreateResourceUoW`, which keeps the domain service nice and tidy. These also does a bunch of `Pin`, `Arc` and `Rc` magic - just read the [article](https://medium.com/@patrickkoss/the-unit-of-work-pattern-in-rust-2bd620f6d517), and the service can go to town for its business responsibilities by just running these units of work.  
 
-The different things a domain service needs to do now are delegated into specialized units of work, like `CreateResourceUoW`, which keeps the domain service nice and tidy.
